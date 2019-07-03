@@ -16,24 +16,28 @@
 
   body {
     background: rgb(223, 221, 221);
-    font-family: "Catamaran", "sans serif";
+    
   }
 
   form {
     width: 75%;
     color: var(--parblue);
+    font-family: "Catamaran", "roboto";
   }
 
-  h1 {
+  h1#head {
     text-align: center;
     color: var(--parblue);
     text-shadow: var(--pargreen) 1px 2px 5px;
+    font-weight: 900;
+    font-family: "Catamaran", "roboto";
   }
 
   h3 {
-    padding-bottom: 3px;
-    margin-bottom: 5px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
     margin-top: 5px;
+    text-decoration: underline;
   }
 
   #fundcalc {
@@ -66,7 +70,11 @@
     border: none;
     border-radius: 5px;
     font-size: 1em;
+    font-weight: 600;
     color: var(--parblue)
+  }
+  input[type=text]:disabled {
+    background: var(--parwhite);
   }
 
   input[name=pay] {
@@ -77,10 +85,14 @@
     padding: 10px
   }
 
-  h3 p {
+  .units {
     margin: 0;
+    margin-bottom: 5px;
     padding: 0;
-    font-size: 12.5px;
+    padding-bottom: 5px;
+    font-size: 15px;
+    text-decoration: none;
+    text-decoration-line: none;
   }
 
   [type=range] {
@@ -100,14 +112,17 @@
 
   [type=range]:focus::-webkit-slider-runnable-track {
     background: var(--parblue);
+    border: 1px outset var(--pargreen);
   }
 
   [type=range]:focus::-ms-fill-lower {
-    background: #eceff1;
+    background: var(--parblue);
+    border: 1px outset var(--pargreen);
   }
 
   [type=range]:focus::-ms-fill-upper {
-    background: #fbfbfc;
+    background: var(--parblue);
+    border: 1px outset var(--pargreen);
   }
 
   [type=range]::-webkit-slider-runnable-track {
@@ -139,7 +154,7 @@
     height: 8px;
     transition: all .2s ease;
     width: 100%;
-    background: #eceff1;
+    background: var(--parblue);
     border: 2px solid #cfd8dc;
     border-radius: 5px;
     height: 4px
@@ -147,7 +162,7 @@
 
   [type=range]::-moz-range-thumb {
     box-shadow: 4px 4px 4px rgba(0, 0, 0, .2), 0 0 4px rgba(13, 13, 13, .2);
-    background: #607d8b;
+    background: var(--pargreen);
     border: 2px solid #eceff1;
     border-radius: 12px;
     cursor: default;
@@ -168,21 +183,21 @@
 
   [type=range]::-ms-fill-lower {
     box-shadow: 1px 1px 1px rgba(0, 0, 0, .2), 0 0 1px rgba(13, 13, 13, .2);
-    background: #dde3e6;
+    background: var(--parblue);
     border: 2px solid #cfd8dc;
     border-radius: 10px
   }
 
   [type=range]::-ms-fill-upper {
     box-shadow: 1px 1px 1px rgba(0, 0, 0, .2), 0 0 1px rgba(13, 13, 13, .2);
-    background: #eceff1;
+    background: var(--parblue);
     border: 2px solid #cfd8dc;
     border-radius: 10px
   }
 
   [type=range]::-ms-thumb {
     box-shadow: 4px 4px 4px rgba(0, 0, 0, .2), 0 0 4px rgba(13, 13, 13, .2);
-    background: #607d8b;
+    background: var(--pargreen);
     border: 2px solid #eceff1;
     border-radius: 12px;
     cursor: default;
@@ -218,16 +233,16 @@
 
 <body>
 
-  <h1>Funding Calculator</h1>
+  <h1 id="head">Funding Calculator</h1>
 
   <center>
     <form id="fundcalc" name=calc method=POST>
       <div>
         <section class="sections">
 
-          <h3>Funding Amount <p>($USD)</p>
+          <h3>Funding Amount 
           </h3>
-
+<p class="units" >($USD)</p>
           <input id="princFund" type=text name=funding size=5 value="200000">
 
           <input class="scrollfund" type=range name=scrollfunding step="10000" min="10000" max="1000000" value="200000">
@@ -237,8 +252,9 @@
 
 
         <section class="sections">
-          <h3>Term <p>(Days)</p>
+          <h3>Term 
           </h3>
+          <p class="units">(Days)</p>
           <input id="term" type=text name=days size=5 value='120'>
           <input class="scrollterm" type=range name=scrolldays size=10 value='120' min="120" step="1" max="356">
         </section>
@@ -253,10 +269,11 @@
         </tr> -->
 
         <section class="sections" id="paymentsection">
-          <h3>Payment Amount<p>($USD)</p>
+          <h3>Payment Amount
+            
           </h3>
-
-          <input type=text name=pay size=5>
+<p class="units">($USD)</p>
+          <input type=text name=pay size=5 disabled>
 
         </section>
 
@@ -264,7 +281,7 @@
         <input class="calcbtn" type=reset value=Reset>
       </div>
     </form>
-    <font size=1>Enter only numeric values (no commas), using decimal points
+    <font size=2>Enter only numeric values (no commas), using decimal points
       where needed.<br>
       Non-numeric values will cause errors.</font>
   </center>
@@ -313,7 +330,7 @@
         const calculatedPayment = rtr / term;
         const feePortion = calculatedPayment * (1 - (1 / intr));
         const princPortion = calculatedPayment - feePortion;
-        document.calc.pay.value = calculatedPayment;
+        document.calc.pay.value = Math.round((calculatedPayment)*100)/100;
         if (calculatedPayment != 0) {
           console.log('fee portion', feePortion);
           console.log('principle portion', princPortion);
