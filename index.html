@@ -1,9 +1,7 @@
 
 
-
-
 <style>
-   :root {
+  :root {
     --parblue: #002366;
     --pargreen: #7ff5bc;
     --parwhite: #ffffff;
@@ -56,7 +54,9 @@
     padding: 15px 5px;
 
   }
-
+  .calcinput{
+    margin: 0 auto !important;
+  }
   .calcbtn{
       color: var(--parblue) !important;
       width: 40% !important;
@@ -64,7 +64,7 @@
   #paymentsection {
     background: var(--pargreen);
   }
-  input[type=text] {
+  input[type=text],  input[type=number] {
     width: 50%;
     padding: 10px;
     border: none;
@@ -74,8 +74,10 @@
     text-align: center;
     font-family: "Helvetica", "Arial", "sans-serif";
     color: #777 !important;
+    pointer-events: none;
+    -moz-appearance:textfield;
   }
-  input[type=text]:disabled {
+  input[type=text]:disabled, input[type=number] {
     background: var(--parwhite);
   }
 
@@ -84,7 +86,8 @@
     border-style: groove;
     border-radius: 5px;
     width: 50%;
-    padding: 10px
+    padding: 10px;
+
   }
 
   .units {
@@ -102,6 +105,7 @@
     background: transparent;
     margin: 12px 0;
     width: 90%;
+    cursor: pointer;
   }
 
   [type=range]::-moz-focus-outer {
@@ -128,14 +132,14 @@
   }
 
   [type=range]::-webkit-slider-runnable-track {
-    cursor: default;
+    cursor: pointer;
     height: 8px;
     transition: all .2s ease;
     width: 100%;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, .2), 0 0 1px rgba(13, 13, 13, .2);
     background: var(--parblue);
     border: 1px solid #cfd8dc;
-    border-radius: 5px
+    border-radius: 5px;
   }
 
   [type=range]::-webkit-slider-thumb {
@@ -147,7 +151,7 @@
     height: 24px;
     width: 24px;
     -webkit-appearance: none;
-    margin-top: -10px
+    margin-top: -10px;
   }
 
   [type=range]::-moz-range-track {
@@ -159,7 +163,7 @@
     background: var(--parblue);
     border: 2px solid #cfd8dc;
     border-radius: 5px;
-    height: 4px
+    height: 4px;
   }
 
   [type=range]::-moz-range-thumb {
@@ -169,7 +173,7 @@
     border-radius: 12px;
     cursor: default;
     height: 20px;
-    width: 20px
+    width: 20px;
   }
 
   [type=range]::-ms-track {
@@ -180,21 +184,21 @@
     background: transparent;
     border-color: transparent;
     border-width: 12px 0;
-    color: transparent
+    color: transparent;
   }
 
   [type=range]::-ms-fill-lower {
     box-shadow: 1px 1px 1px rgba(0, 0, 0, .2), 0 0 1px rgba(13, 13, 13, .2);
     background: var(--parblue);
     border: 2px solid #cfd8dc;
-    border-radius: 10px
+    border-radius: 10px;
   }
 
   [type=range]::-ms-fill-upper {
     box-shadow: 1px 1px 1px rgba(0, 0, 0, .2), 0 0 1px rgba(13, 13, 13, .2);
     background: var(--parblue);
     border: 2px solid #cfd8dc;
-    border-radius: 10px
+    border-radius: 10px;
   }
 
   [type=range]::-ms-thumb {
@@ -231,93 +235,105 @@
   [type=range]:disabled::-ms-fill-upper {
     cursor: not-allowed
   }
+
+  @media (max-width: 800px) {
+    input[type=text],  input[type=number] {
+
+      font-size: 1em;
+
+    }
+  }
 </style>
 
 <body>
 
   <h1 id="head">Funding Calculator</h1>
-
   <center>
     <form id="fundcalc" name=calc method=POST>
       <div>
         <section class="sections">
 
-          <h3>Funding Amount 
+          <h3>Funding Amount
           </h3>
 <p class="units" >($USD)</p>
-          <input id="princFund" type=text name=funding size=5 value="200000">
+          <input id="princFund" class="calcinput" type=number name=funding size=5 value="200000">
 
-          <input class="scrollfund" type=range name=scrollfunding step="10000" min="10000" max="1000000" value="200000">
+          <input class="scrollfund calcinput" type=range name=scrollfunding step="10000" min="10000" max="1000000" value="200000">
         </section>
-
-
 
 
         <section class="sections">
-          <h3>Term 
+          <h3>Term
           </h3>
           <p class="units">(Days)</p>
-          <input id="term" type=text name=days size=5 value='120'>
-          <input class="scrollterm" type=range name=scrolldays size=10 value='120' min="120" step="1" max="356">
+          <input id="term" class="calcinput" type=number name=days size=5 value='120'>
+          <input class="scrollterm calcinput" type=range name=scrolldays size=10 value='120' min="120" step="1" max="356">
         </section>
+
+
+        <!-- Interest Rate is fixed and should not be visible to the user, if you want to change it dynamically please uncomment below code and referece the element in the JavaScript variable "intr" below -->
+        <!-- <tr>
+          <td bgcolor="#eeeee"> Rate (%)</td>
+          <td bgcolor="#aaeeaa" align=right><input type=text name=rate size=10 value="1.25" ></td>
+        </tr> -->
+
         <section class="sections" id="paymentsection">
           <h3>Payment Amount
-            
           </h3>
 <p class="units">($USD)</p>
-          <input type=text name=pay size=5 disabled>
+          <input class="calcinput" type=text name=pay size=5 disabled>
 
         </section>
 
-        <input class="calcbtn" type=button onClick='showpay()' value=Calculate>
-        <input class="calcbtn" type=reset value=Reset>
       </div>
     </form>
-    <font size=2>Enter only numeric values (no commas), using decimal points
-      where needed.<br>
-      Non-numeric values will cause errors.</font>
+
   </center>
-
-
   <script language="JavaScript">
 
-   
+    //slider inputs for funding and term
     var fundInputs = document.querySelectorAll('.scrollfund');
     var termInputs = document.querySelectorAll('.scrollterm');
 
- 
-    var fundVisual = document.getElementById('princFund');  
+    //text input for funding or term
+    var fundVisual = document.getElementById('princFund');  //funding amount that teh user sees
     var termVisual = document.getElementById('term');
 
-  
+    //function for updating fund amt via slider input
     function handleFundUpdate() {
       fundVisual.setAttribute('value', this.value);
-      console.log(this.value, this.name, 'here is the value');
+      // console.log(this.value, this.name, 'here is the value');
+      showpay()
     }
 
- 
+    //function for updating term length via slider input
     function handleTermUpdate() {
       termVisual.setAttribute('value', this.value);
-      console.log(this.value, this.name, 'here is the value');
+      // console.log(this.value, this.name, 'here is the value');
+      showpay()
     }
 
-    
+    function handlePaymentAmount(){
+
+    }
+    //eventListeners for the term and funding inputs
     fundInputs.forEach(input => input.addEventListener('change', handleFundUpdate));
     termInputs.forEach(input => input.addEventListener('change', handleTermUpdate));
-    
+    // fundInputs.forEach(input => input.addEventListener('mouseover', handleUpdate));
 
     function showpay() {
       if ((document.calc.funding.value == null || document.calc.funding.value.length == 0) ||
         (document.calc.days.value == null || document.calc.days.value.length == 0)
-        
+        // ||
+        // (document.calc.rate.value == null || document.calc.rate.value.length == 0)
       ) {
         document.calc.pay.value = "Incomplete data";
       }
       else {
-        var princ = document.calc.funding.value; 
-        var term = document.calc.days.value; 
-        var intr = 1.25; 
-        var rtr = princ * intr;
+        var princ = document.calc.funding.value; // principle funding amount
+        var term = document.calc.days.value; //Term in days
+        var intr = 1.25; //Interest RATE FIXED
+        var rtr = princ * intr;// Repayment Track Record
         const calculatedPayment = rtr / term;
         const feePortion = calculatedPayment * (1 - (1 / intr));
         const princPortion = calculatedPayment - feePortion;
@@ -328,9 +344,12 @@
           console.log(intr, 'Fixed Rate')
         }
       }
-      
+      // payment = principle * monthly interest/(1 - (1/(1+MonthlyInterest)*Months))
     }
-       
+        //
+    window.onload = function(evt){
+      showpay()
+    }
   </script>
 </body>
 
